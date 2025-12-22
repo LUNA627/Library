@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="24dp">
+
+    <!-- Заголовок -->
+
+    <!-- Поле ФИО -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Регистрация студента"
+        android:textColor="@color/purple_500"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fullName_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        app:hintTextColor="@color/gray_light"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fullName_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ФИО"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/purple_200"
+            android:inputType="textPersonName" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Поле Email -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        app:hintTextColor="@color/gray_light"
+        app:layout_constraintTop_toBottomOf="@id/fullName_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/purple_200"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Поле Пароль -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/gray_light"
+        app:hintTextColor="@color/gray_light"
+        app:layout_constraintTop_toBottomOf="@id/email_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Пароль (мин. 6 символов)"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/purple_200"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Поле Подтверждение пароля -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirm_password_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/gray_light"
+        app:hintTextColor="@color/gray_light"
+        app:layout_constraintTop_toBottomOf="@id/password_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirm_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Подтвердите пароль"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/purple_200"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Кнопка "Зарегистрироваться" -->
+
+    <!-- Кнопка "Назад" (текстовая) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/purple_500"
+        android:text="Зарегистрироваться"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@drawable/button_style"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="← Назад"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:textColor="@color/gray_light"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/register_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

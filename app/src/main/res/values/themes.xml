@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.LibraryApp"  parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <!-- Тема для Splash -->
+    <style name="Theme.LibraryApp.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/purple_500</item>
+    </style>
+</resources>

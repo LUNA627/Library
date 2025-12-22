@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/dark_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Обложка -->
+        <ImageView
+            android:id="@+id/bookCoverImageView"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder_book"
+            android:contentDescription="Обложка книги" />
+
+        <!-- Информация о книге -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <!-- Название -->
+            <TextView
+                android:id="@+id/bookTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Программирование на Kotlin"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Выдано -->
+            <TextView
+                android:id="@+id/issueDateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Выдано: 15.04.2024"
+                android:textColor="@color/gray_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Возврат (если бумажная) -->
+            <TextView
+                android:id="@+id/returnDateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Вернуть до: 15.05.2024"
+                android:textColor="@color/gray_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Метка доступности -->
+            <TextView
+                android:id="@+id/statusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟢"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Кнопка Продлить / Читать -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/actionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ПРОДЛИТЬ"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:textColor="@color/purple_500"
+            android:layout_gravity="bottom" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/dark_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Обложка (если есть) -->
+        <ImageView
+            android:id="@+id/bookCoverImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Обложка книги" />
+
+        <!-- Название книги -->
+        <TextView
+            android:id="@+id/bookTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Название книги"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <!-- Автор -->
+        <TextView
+            android:id="@+id/bookAuthorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Автор: Иван Иванов"
+            android:textColor="@color/gray_light"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Раздел -->
+        <TextView
+            android:id="@+id/bookCategoryTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Раздел: Программирование"
+            android:textColor="@color/gray_light"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Метки -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <!-- Электронная -->
+            <TextView
+                android:id="@+id/electronicBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ЭЛЕКТРОННАЯ]"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:background="@drawable/badge_blue"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Доступна -->
+            <TextView
+                android:id="@+id/availableBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ДОСТУПНА]"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:background="@drawable/badge_green"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
+
+        </LinearLayout>
+
+        <!-- Кнопка Подробнее -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detailsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Подробнее"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:textColor="@color/purple_500"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

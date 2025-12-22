@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/dark_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/bookCover"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder_book"
+            android:contentDescription="Обложка" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/bookTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Название книги"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Автор"
+                android:textColor="@color/gray_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/bookIsbn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ISBN: 1234567890"
+                android:textColor="@color/gray_light"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

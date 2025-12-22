@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="24dp">
+
+    <!-- Заголовок -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ВХОД В БИБЛИОТЕКУ"
+        android:textColor="@color/purple_500"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp" />
+
+    <!-- RadioGroup без иконок -->
+    <RadioGroup
+        android:id="@+id/roleRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Студент -->
+        <RadioButton
+            android:id="@+id/studentRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Студент"
+            android:textColor="@color/purple_700"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:buttonTint="@color/purple_500"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Преподаватель -->
+        <RadioButton
+            android:id="@+id/teacherRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Преподаватель"
+            android:textColor="@color/purple_700"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:buttonTint="@color/purple_500"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Библиотекарь -->
+        <RadioButton
+            android:id="@+id/librarianRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Библиотекарь"
+            android:textColor="@color/purple_700"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:buttonTint="@color/purple_500"
+            android:background="?attr/selectableItemBackground" />
+
+    </RadioGroup>
+
+    <!-- Кнопка ДАЛЕЕ -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="ДАЛЕЕ"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@drawable/button_style"
+        android:backgroundTint="@color/purple_500"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toBottomOf="@id/roleRadioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="32dp"
+        android:enabled="false" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

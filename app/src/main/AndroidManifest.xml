@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:name=".presentation.ui.main.BD.db.App"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LibraryApp">
+        <activity
+            android:name=".presentation.ui.main.SplashScreenActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LibraryApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Выбор роли -->
+        <activity
+            android:name=".presentation.ui.main.RoleSelectionActivity"
+            android:exported="false" />
+
+        <!-- Универсальный вход -->
+        <activity
+            android:name=".presentation.ui.main.AuthActivity"
+            android:exported="false" />
+
+        <!-- Регистрация студента -->
+        <activity
+            android:name=".presentation.ui.main.StudentRegistrationActivity"
+            android:exported="false" />
+
+        <!-- Главный экран (каталог книг, для студента) -->
+        <activity
+            android:name=".presentation.ui.main.MainActivity"
+            android:exported="false" />
+
+        <!-- Профиль студента -->
+        <activity
+            android:name=".presentation.ui.main.ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.BookDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.BookManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.SearchBookActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.AddEditBookActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.LibrarianProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.UserManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.ui.main.AddTeacherActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

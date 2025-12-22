@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:title="Добавить в фонд"
+        app:titleTextColor="@color/purple_500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Обложка и данные из API -->
+    <LinearLayout
+        android:id="@+id/bookInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/bookCover"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder_book"
+            android:contentDescription="Обложка" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/bookTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Название книги"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Автор"
+                android:textColor="@color/gray_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/bookIsbn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ISBN: 1234567890"
+                android:textColor="@color/gray_light"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Выбор раздела -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/categoryInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        app:layout_constraintTop_toBottomOf="@id/bookInfoContainer">
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/bookIsbn" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Тип книги -->
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/electronicCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Электронная книга"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/categoryInputLayout" />
+
+    <!-- Количество экземпляров -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/copiesInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/purple_500"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/electronicCheckbox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/copiesEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Количество экземпляров"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray_dark"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Кнопка сохранения -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Добавить"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/purple_500"
+        android:background="@drawable/button_style"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/copiesInputLayout"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

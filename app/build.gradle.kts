@@ -18,6 +18,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        configurations.all {
+            exclude(group = "com.google.guava", module = "listenablefuture")
+        }
     }
 
     buildTypes {
@@ -56,6 +60,7 @@ dependencies {
 
 // Room Database
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.compiler)
     kapt("androidx.room:room-compiler:2.6.1")
 
 // Navigation Component

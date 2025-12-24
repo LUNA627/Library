@@ -5,11 +5,14 @@ import com.example.library.presentation.ui.main.BD.dao.UserDao
 
 class BookRepository(
     private val bookDao: BookDao,
-    private val api: GoogleBooksApi
+    private val api: GoogleBooksApi? = null
 ) {
 
     // 1. Поиск книг через API
     suspend fun searchBooks(query: String): List<ExternalBook> {
+        if (api == null) {
+            return emptyList()
+        }
         val response = api.searchBooks(query)
         return response.items?.map { item ->
             val isbn = item.volumeInfo.industryIdentifiers
@@ -75,6 +78,9 @@ class BookRepository(
         bookDao.deleteLibraryBook(bookId)
     }
 
+    suspend fun saveExternalBook(book: ExternalBook) {
+        bookDao.insertExternalBook(book)
+    }
     suspend fun getTotalBooks(): Int = bookDao.getTotalBooks()
     suspend fun getActiveLoans(): Int = bookDao.getActiveLoans()
 }

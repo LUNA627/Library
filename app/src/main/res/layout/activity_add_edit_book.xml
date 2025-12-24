@@ -89,6 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textColor="@color/purple_200"
             app:layout_constraintTop_toBottomOf="@id/bookIsbn" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Электронная книга"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_200"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/categoryInputLayout" />
 
@@ -119,7 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Количество экземпляров"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_200"
             android:textColorHint="@color/gray_dark"
             android:inputType="number" />
 

@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.library.R
 import com.example.library.presentation.ui.main.BD.BookRepository
+import com.example.library.presentation.ui.main.BD.ExternalBook
 import com.example.library.presentation.ui.main.BD.GoogleBooksApi
+import com.example.library.presentation.ui.main.BD.IndustryIdentifier
 import com.example.library.presentation.ui.main.BD.db.App
 import com.example.library.presentation.ui.main.BD.db.LibraryDatabase
 import com.google.android.material.appbar.MaterialToolbar
@@ -32,6 +34,8 @@ class SearchBookActivity : AppCompatActivity() {
 
     private lateinit var adapter: SearchResultAdapter
     private lateinit var repository: BookRepository
+
+    // Убираем searchBooks из Activity — он должен быть в Repository!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +61,12 @@ class SearchBookActivity : AppCompatActivity() {
 
         // Настройка Repository
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.googleapis.com/books/v1/") // ← исправлено!
+            .baseUrl("https://www.googleapis.com/books/v1/") // ← УБРАЛ ПРОБЕЛЫ!
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val api = retrofit.create(GoogleBooksApi::class.java)
-        val db = App.database // ← исправлено!
+        val db = App.database
         repository = BookRepository(db.bookDao(), api)
 
         // Обработчик поиска
@@ -70,7 +74,7 @@ class SearchBookActivity : AppCompatActivity() {
             val query = searchEditText.text.toString().trim()
             Log.d("Search", "Кнопка нажата, запрос: '$query'")
             if (query.isNotEmpty()) {
-                searchBooks(query)
+                searchBooks(query) // ← вызываем правильный метод
             }
         }
 
@@ -80,15 +84,16 @@ class SearchBookActivity : AppCompatActivity() {
         }
     }
 
+    // Правильный метод — НЕ suspend!
     private fun searchBooks(query: String) {
         progressBar.visibility = View.VISIBLE
         resultsRecyclerView.visibility = View.GONE
 
         lifecycleScope.launch {
             try {
-
                 Log.d("Search", "Запрос: $query")
 
+                // Вызываем метод из Repository!
                 val books = repository.searchBooks(query)
 
                 Log.d("Search", "Найдено книг: ${books.size}")
@@ -99,6 +104,7 @@ class SearchBookActivity : AppCompatActivity() {
                 adapter.updateData(books)
                 resultsRecyclerView.visibility = View.VISIBLE
             } catch (e: Exception) {
+                Log.e("Search", "Ошибка поиска", e)
                 Toast.makeText(this@SearchBookActivity, "Ошибка поиска: ${e.message}", Toast.LENGTH_SHORT).show()
             } finally {
                 progressBar.visibility = View.GONE

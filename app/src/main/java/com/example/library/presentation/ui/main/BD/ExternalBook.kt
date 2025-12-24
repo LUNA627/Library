@@ -14,5 +14,6 @@ data class ExternalBook(
     val description: String?,
     val imageUrl: String?,
     val thumbnailUrl: String?,
-    val isbn: String?
+    val isbn: String?,
+    val categoryId: Long = 1L
 ) : Parcelable

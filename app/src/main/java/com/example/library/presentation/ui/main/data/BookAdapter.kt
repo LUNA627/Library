@@ -1,5 +1,6 @@
 package com.example.library.presentation.ui.main.data
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.library.R
 import com.example.library.presentation.ui.main.BookDetailsActivity
+import com.example.library.presentation.ui.main.MainActivity
 import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 
-class BookAdapter(private var books: List<Book>) :
-    RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+class BookAdapter(
+    private val context: Context,
+    private var books: List<DisplayBook>
+) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coverImageView: ImageView = itemView.findViewById(R.id.bookCoverImageView)
@@ -38,22 +43,40 @@ class BookAdapter(private var books: List<Book>) :
         holder.authorTextView.text = "Автор: ${book.author}"
         holder.categoryTextView.text = "Раздел: ${book.category}"
 
-        // Метки
         holder.electronicBadge.visibility = if (book.isElectronic) View.VISIBLE else View.GONE
-        holder.availableBadge.visibility = View.VISIBLE // В учебном проекте всегда доступна
+        holder.availableBadge.visibility = View.VISIBLE
 
-        // Кнопка "Подробнее"
+        holder.detailsButton.text = "Добавить"
         holder.detailsButton.setOnClickListener {
-            val intent = Intent(holder.itemView.context, BookDetailsActivity::class.java)
-            intent.putExtra("book_title", book.title)
-            holder.itemView.context.startActivity(intent)
+            // Обновляем состояние кнопки
+            if (book.isAdded) {
+                holder.detailsButton.text = "Добавлено!"
+                holder.detailsButton.isEnabled = false
+            }
+            else {
+                holder.detailsButton.text = "Добавить"
+                holder.detailsButton.isEnabled = true
+                holder.detailsButton.setOnClickListener {
+                    if (context is MainActivity) {
+                        context.addBookToUserProfile(book) { success ->
+                            if (success) {
+                                // Обновляем флаг и кнопку
+                                book.isAdded = true
+                                holder.detailsButton.text = "Добавлено!"
+                                holder.detailsButton.isEnabled = false
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    fun updateData(newBooks: List<DisplayBook>) {
+        this.books = newBooks
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = books.size
 
-    fun updateData(newBooks: List<Book>) {
-        this.books = newBooks
-        notifyDataSetChanged()
-    }
 }

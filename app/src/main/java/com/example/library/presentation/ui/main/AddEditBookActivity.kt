@@ -176,6 +176,8 @@ class AddEditBookActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
+
+                repository.saveExternalBook(selectedBook)
                 if (libraryBookId == -1L) {
                     // Добавление
                     repository.addLibraryBook(selectedBook, categoryId, isElectronic, copies)
@@ -209,19 +211,4 @@ class AddEditBookActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCategoryName(categoryId: Long): String = when (categoryId) {
-        1L -> "Программирование"
-        2L -> "История"
-        3L -> "Художественная литература"
-        4L -> "Наука"
-        else -> "Программирование"
-    }
-
-    private fun getCategoryIdByName(name: String): Long = when (name) {
-        "Программирование" -> 1L
-        "История" -> 2L
-        "Художественная литература" -> 3L
-        "Наука" -> 4L
-        else -> 1L
-    }
 }

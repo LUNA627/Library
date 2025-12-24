@@ -16,7 +16,7 @@ interface BookDao {
     suspend fun insertExternalBook(book: ExternalBook)
 
     @Insert
-    suspend fun insertLibraryBook(book: LibraryBook)
+    suspend fun insertLibraryBook(libraryBook: LibraryBook): Long
 
     @Query("SELECT * FROM library_book")
     suspend fun getAllLibraryBooks(): List<LibraryBook>
@@ -24,14 +24,12 @@ interface BookDao {
     @Query("SELECT * FROM external_book WHERE apiId = :apiId")
     suspend fun getExternalBookById(apiId: String): ExternalBook?
 
-    @Update
-    suspend fun updateLibraryBook(book: LibraryBook)
 
     @Query("DELETE FROM library_book WHERE bookId = :bookId")
     suspend fun deleteLibraryBook(bookId: Long)
 
-    @Query("SELECT * FROM library_book WHERE externalBookId = :apiId")
-    suspend fun getLibraryBookByExternalId(apiId: String): LibraryBook?
+    @Query("SELECT * FROM library_book WHERE externalBookId = :externalBookId")
+    suspend fun getLibraryBookByExternalId(externalBookId: String): LibraryBook?
 
 
     @Query("SELECT * FROM library_book WHERE bookId = :bookId")
@@ -51,4 +49,14 @@ interface BookDao {
 
     @Query("SELECT * FROM loan WHERE userId = :userId")
     suspend fun getAllLoansByUser(userId: Long): List<Loan>
+
+    @Insert
+    suspend fun insertLoan(loan: Loan): Long
+
+    @Update
+    suspend fun updateLibraryBook(libraryBook: LibraryBook)
+
+    @Query("SELECT * FROM external_book")
+    suspend fun getAllExternalBooks(): List<ExternalBook>
+
 }

@@ -25,7 +25,7 @@ class LibraryBookAdapter(
     private val context: Context,
     private var books: List<LibraryBook>,
     private val repository: BookRepository,
-    private val onBookDeleted: () -> Unit // callback для обновления списка
+    private val onBookDeleted: () -> Unit
 ) : RecyclerView.Adapter<LibraryBookAdapter.BookViewHolder>() {
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -86,7 +86,7 @@ class LibraryBookAdapter(
             "Доступно: ${book.copiesAvailable}/${book.copiesTotal}"
         }
 
-        // 👆 Одиночный клик — редактирование
+        // Одиночный клик — редактирование
         holder.itemView.setOnClickListener {
             val intent = Intent(context, AddEditBookActivity::class.java).apply {
                 putExtra("library_book", book)
@@ -94,7 +94,7 @@ class LibraryBookAdapter(
             it.context.startActivity(intent)
         }
 
-        // 👇 Долгое нажатие — удаление
+        // Долгое нажатие — удаление
         holder.itemView.setOnLongClickListener {
             AlertDialog.Builder(it.context)
                 .setTitle("Удалить книгу?")
@@ -120,7 +120,6 @@ class LibraryBookAdapter(
         notifyDataSetChanged()
     }
 
-    // Вспомогательная функция — отображение категории
     private fun getCategoryName(categoryId: Long): String {
         return when (categoryId) {
             1L -> "Программирование"

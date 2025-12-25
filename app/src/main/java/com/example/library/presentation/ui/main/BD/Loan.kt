@@ -8,9 +8,9 @@ data class Loan(
     @PrimaryKey(autoGenerate = true) val loanId: Long = 0,
     val userId: Long,
     val bookId: Long,
-    val issueDate: Long, // ← должно быть Long
-    val dueDate: Long,   // ← должно быть Long
+    val issueDate: Long,
+    val dueDate: Long,
     val returnDate: Long? = null,
-    val status: String, // "active", "returned"
+    val status: String,
     val isExtended: Boolean = false
 )

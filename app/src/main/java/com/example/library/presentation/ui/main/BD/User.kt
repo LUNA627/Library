@@ -8,8 +8,10 @@ data class User(
     @PrimaryKey(autoGenerate = true) val userId: Long = 0,
     val email: String,
     val password: String,
-    val fullName: String,
+    val fullName: String = "",
     val role: String,
     val registrationDate: Long,
-    val isBlocked: Boolean
+    val isActive: Boolean = true,
+    val isBlocked: Boolean = false
+
 )

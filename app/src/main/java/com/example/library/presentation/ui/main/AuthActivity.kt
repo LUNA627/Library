@@ -13,7 +13,9 @@ import com.example.library.presentation.ui.main.BD.db.App
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.max
 
 class AuthActivity : AppCompatActivity() {
@@ -45,7 +47,7 @@ class AuthActivity : AppCompatActivity() {
         setupUIByRole()
 
         registerButton.setOnClickListener {
-            // Переход на регистрацию
+
             val intent = Intent(this, StudentRegistrationActivity::class.java)
             startActivity(intent)
         }
@@ -53,6 +55,7 @@ class AuthActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             attemptLogin()
         }
+
 
     }
 
@@ -101,34 +104,56 @@ class AuthActivity : AppCompatActivity() {
         if (!valid) return
 
         lifecycleScope.launch {
-            val loginSuccess = when (userRole) {
+            var loginSuccess = false
+            var errorMessage = "Неверный email или пароль"
+
+            when (userRole) {
                 "librarian" -> {
-                    // Оставим админа на жёстких данных (или тоже перенеси в БД позже)
-                    email == LIBRARIAN_EMAIL && password == LIBRARIAN_PASSWORD
+                    loginSuccess = email == LIBRARIAN_EMAIL && password == LIBRARIAN_PASSWORD
+                    errorMessage = "Неверный логин или пароль библиотекаря"
                 }
                 "teacher", "student" -> {
-                    // Проверяем ВСЕХ через базу данных
                     val db = App.database
                     val user = db.userDao().getUserByEmail(email)
-                    user != null && user.password == password && user.role == userRole
+                    if (user == null) {
+                        errorMessage = "Пользователь не найден"
+                    } else if (user.password != password) {
+                        errorMessage = "Неверный пароль"
+                    } else if (user.role != userRole) {
+
+                        errorMessage = when (userRole) {
+                            "teacher" -> "Пользователь не является преподавателем"
+                            "student" -> "Пользователь не является студентом"
+                            else -> "Неверная роль"
+                        }
+                    } else if (user.isBlocked) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@AuthActivity, "Ваш аккаунт заблокирован", Toast.LENGTH_SHORT).show()
+                        }
+                        return@launch
+                    } else {
+                        loginSuccess = true
+                    }
                 }
-                else -> false
             }
 
             if (loginSuccess) {
                 saveLoginState(email, userRole)
-                val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                withContext(Dispatchers.Main) {
+                    startActivity(Intent(this@AuthActivity, MainActivity::class.java))
+                    finish()
+                }
             } else {
-                Toast.makeText(this@AuthActivity, "Неверный email, пароль или роль", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AuthActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
 
     private fun saveLoginState(email: String, role: String) {
-        // Сохраняем в SharedPreferences
+
         val prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val maxLoanDays = when(role) {
             "teacher" -> 60

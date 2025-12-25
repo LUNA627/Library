@@ -2,6 +2,7 @@ package com.example.library.presentation.ui.main.data
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.library.R
 import com.example.library.presentation.ui.main.BookDetailsActivity
 import com.example.library.presentation.ui.main.MainActivity
@@ -46,6 +48,15 @@ class BookAdapter(
         holder.electronicBadge.visibility = if (book.isElectronic) View.VISIBLE else View.GONE
         holder.availableBadge.visibility = View.VISIBLE
 
+        Glide.with(holder.coverImageView.context)
+            .load(book.imageUrl)
+            .placeholder(R.drawable.ic_placeholder_book)
+            .fitCenter()
+            .into(holder.coverImageView)
+
+        Log.d("BOOK_IMAGE", "URL: ${book.imageUrl}")
+
+
         holder.detailsButton.text = "Добавить"
         holder.detailsButton.setOnClickListener {
             // Обновляем состояние кнопки
@@ -60,7 +71,6 @@ class BookAdapter(
                     if (context is MainActivity) {
                         context.addBookToUserProfile(book) { success ->
                             if (success) {
-                                // Обновляем флаг и кнопку
                                 book.isAdded = true
                                 holder.detailsButton.text = "Добавлено!"
                                 holder.detailsButton.isEnabled = false
@@ -71,6 +81,8 @@ class BookAdapter(
             }
         }
     }
+
+
 
     fun updateData(newBooks: List<DisplayBook>) {
         this.books = newBooks

@@ -35,7 +35,7 @@ class SearchBookActivity : AppCompatActivity() {
     private lateinit var adapter: SearchResultAdapter
     private lateinit var repository: BookRepository
 
-    // Убираем searchBooks из Activity — он должен быть в Repository!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +84,6 @@ class SearchBookActivity : AppCompatActivity() {
         }
     }
 
-    // Правильный метод — НЕ suspend!
     private fun searchBooks(query: String) {
         progressBar.visibility = View.VISIBLE
         resultsRecyclerView.visibility = View.GONE
@@ -93,7 +92,6 @@ class SearchBookActivity : AppCompatActivity() {
             try {
                 Log.d("Search", "Запрос: $query")
 
-                // Вызываем метод из Repository!
                 val books = repository.searchBooks(query)
 
                 Log.d("Search", "Найдено книг: ${books.size}")

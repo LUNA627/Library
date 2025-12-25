@@ -48,10 +48,9 @@ class StudentRegistrationActivity : AppCompatActivity(){
         confirmPasswordInputLayout = findViewById(R.id.confirm_password_input_layout)
 
 
-        // Обработчики
         registerButton.setOnClickListener { registerStudent() }
         backButton.setOnClickListener {
-            finish() // Возвращаемся в AuthActivity
+            finish()
         }
 
 
@@ -97,7 +96,6 @@ class StudentRegistrationActivity : AppCompatActivity(){
 
         lifecycleScope.launch {
             try {
-                // Генерируем ID (можно через System.currentTimeMillis())
                 val userId = System.currentTimeMillis()
                 val registrationDate = System.currentTimeMillis()
 

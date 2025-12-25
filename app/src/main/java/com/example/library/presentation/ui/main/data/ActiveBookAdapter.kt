@@ -36,7 +36,7 @@ class ActiveBookAdapter(private var books: List<ActiveBook>) :
         holder.returnDateTextView.text = if (book.isElectronic) "" else "Вернуть до: ${book.returnDate}"
         holder.statusBadge.text = book.status
 
-        // Кнопка действия
+
         val buttonText = if (book.isElectronic) "ЧИТАТЬ" else "ПРОДЛИТЬ"
         holder.actionButton.text = buttonText
 
@@ -44,7 +44,6 @@ class ActiveBookAdapter(private var books: List<ActiveBook>) :
             Toast.makeText(holder.itemView.context, "Кнопка $buttonText нажата", Toast.LENGTH_SHORT).show()
         }
 
-        // При клике на обложку — показываем подробности
         holder.coverImageView.setOnClickListener {
             Toast.makeText(holder.itemView.context, "Подробности: ${book.title}", Toast.LENGTH_SHORT).show()
         }

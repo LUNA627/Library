@@ -48,7 +48,7 @@ class AddEditBookActivity : AppCompatActivity() {
 
 
     // Инициализация ID
-    private var libraryBookId: Long = -1L // ← вот так
+    private var libraryBookId: Long = -1L
     private var currentIsElectronic: Boolean = false
     private var currentCopies: Int = 1
     private var currentCategoryId: Long = 1L
@@ -135,7 +135,6 @@ class AddEditBookActivity : AppCompatActivity() {
             saveButton.text = "Добавить в фонд"
         }
 
-        // Сохранение
         saveButton.setOnClickListener {
             saveBookToLibrary()
         }
@@ -147,7 +146,6 @@ class AddEditBookActivity : AppCompatActivity() {
         bookAuthor.text = selectedBook.author
         bookIsbn.text = selectedBook.isbn?.let { "ISBN: $it" } ?: "ISBN: —"
 
-        // Загрузка обложки (если нужно)
         if (!selectedBook.imageUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(selectedBook.imageUrl)
@@ -166,7 +164,7 @@ class AddEditBookActivity : AppCompatActivity() {
             copiesEditText.text.toString().toIntOrNull() ?: 1
         }
 
-        // Получаем categoryId из Spinner
+
         val categoryId = when (selectedCategoryIndex) {
             0 -> 1L
             1 -> 2L
@@ -179,17 +177,17 @@ class AddEditBookActivity : AppCompatActivity() {
 
                 repository.saveExternalBook(selectedBook)
                 if (libraryBookId == -1L) {
-                    // Добавление
+
                     repository.addLibraryBook(selectedBook, categoryId, isElectronic, copies)
 
-                    // Переход в главное меню
+
                     val intent = Intent(this@AddEditBookActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                     Toast.makeText(this@AddEditBookActivity, "Книга добавлена!", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    // Редактирование
+
                     val updatedBook = LibraryBook(
                         bookId = libraryBookId,
                         externalBookId = selectedBook.apiId,

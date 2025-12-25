@@ -3,6 +3,7 @@ package com.example.library.presentation.ui.main.BD.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.library.presentation.ui.main.BD.User
 
 @Dao
@@ -18,4 +19,8 @@ interface UserDao {
 
     @Query("SELECT COUNT(*) FROM user WHERE isBlocked = 1")
     suspend fun getBlockedUsersCount(): Int
+
+    @Update
+    suspend fun updateUser(user: User)
+
 }

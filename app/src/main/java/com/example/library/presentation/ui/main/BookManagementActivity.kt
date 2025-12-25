@@ -80,11 +80,11 @@ class BookManagementActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ADD_BOOK && resultCode == RESULT_OK) {
-            loadBooks() // ← обновляем список!
+            loadBooks()
         }
     }
 
     companion object {
-        private const val REQUEST_ADD_BOOK = 1001 // ← любое уникальное число
+        private const val REQUEST_ADD_BOOK = 1001
     }
 }

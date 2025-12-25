@@ -33,7 +33,7 @@ class SearchResultAdapter(
         holder.author.text = book.author
         holder.isbn.text = book.isbn?.let { "ISBN: $it" } ?: "ISBN: —"
 
-        // Загружаем обложку (можно через Glide, но для учебы — placeholder)
+
         holder.cover.setImageResource(R.drawable.ic_placeholder_book)
 
         holder.itemView.setOnClickListener {

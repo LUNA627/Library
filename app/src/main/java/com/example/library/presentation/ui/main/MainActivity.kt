@@ -180,7 +180,8 @@ import retrofit2.converter.gson.GsonConverterFactory
                                 author = externalBook.author,
                                 category = getCategoryName(libBook.categoryId),
                                 isElectronic = libBook.isElectronic,
-                                isAdded = isAdded
+                                isAdded = isAdded,
+                                imageUrl = externalBook.imageUrl
                             )
                         )
                     }
@@ -232,24 +233,33 @@ import retrofit2.converter.gson.GsonConverterFactory
             lifecycleScope.launch {
                 val db = App.database
                 val libraryBooks = db.bookDao().getAllLibraryBooks()
-                val filteredBooks = mutableListOf<Book>()
+                val filteredBooks = mutableListOf<DisplayBook>() // ← измени тип
 
                 for (libBook in libraryBooks) {
                     val external = db.bookDao().getExternalBookById(libBook.externalBookId)
                     if (external != null) {
-                        val matches = external.title.contains(query, ignoreCase = true) ||
-                                external.author.contains(query, ignoreCase = true)
-                        if (matches || query.isEmpty()) {
+                        if (query.isEmpty() || external.title.contains(query, ignoreCase = true)) {
+                            // Проверяем, добавлена ли книга пользователем
+                            val isAdded = isBookAddedByUser(external.title)
+
                             filteredBooks.add(
-                                Book(
+                                DisplayBook(
                                     title = external.title,
                                     author = external.author,
                                     category = getCategoryName(libBook.categoryId),
-                                    isElectronic = libBook.isElectronic
+                                    isElectronic = libBook.isElectronic,
+                                    isAdded = isAdded,
+                                    imageUrl = external.imageUrl
                                 )
                             )
                         }
                     }
+                }
+
+                withContext(Dispatchers.Main) {
+                    allBooks.clear()
+                    allBooks.addAll(filteredBooks)
+                    adapter.notifyDataSetChanged()
                 }
             }
         }

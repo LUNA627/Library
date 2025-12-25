@@ -54,7 +54,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val db = App.database
         repository = BookRepository(db.bookDao(), null)
 
-        // Кнопка "Добавить" → "Забронировать"
+
         borrowButton.setOnClickListener {
             if (book != null) {
                 borrowBook(book!!)
@@ -83,7 +83,7 @@ class BookDetailsActivity : AppCompatActivity() {
         bookCategoryTextView.text = "Раздел: ${getCategoryName(book?.categoryId ?: 1L)}"
         bookDescriptionTextView.text = book?.description ?: "Описание отсутствует"
 
-        // Загрузка обложки
+
         Glide.with(this)
             .load(book?.imageUrl)
             .placeholder(R.drawable.ic_placeholder_book)
@@ -125,19 +125,19 @@ class BookDetailsActivity : AppCompatActivity() {
 
 
     private suspend fun addBookToLibrary(book: ExternalBook, user: User) {
-        // Добавляем книгу в библиотеку (как новую)
+
         val categoryId = 1L // По умолчанию — Программирование
         val newLibraryBook = LibraryBook(
             bookId = 0,
             externalBookId = book.apiId,
             categoryId = categoryId,
-            isElectronic = false, // Можно сделать выбор
+            isElectronic = false,
             copiesTotal = 1,
             copiesAvailable = 1
         )
         val bookId = App.database.bookDao().insertLibraryBook(newLibraryBook)
 
-        // Бронируем
+
         val loan = Loan(
             loanId = 0,
             userId = user.userId,

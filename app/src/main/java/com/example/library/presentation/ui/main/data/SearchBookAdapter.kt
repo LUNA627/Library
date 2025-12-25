@@ -32,7 +32,7 @@ class SearchBookAdapter(
         holder.author.text = "Автор: ${book.author}"
 
         holder.itemView.setOnClickListener {
-            onItemClick(book) // ← вызов лямбды
+            onItemClick(book)
         }
     }
 

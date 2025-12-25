@@ -8,7 +8,7 @@ class BookRepository(
     private val api: GoogleBooksApi? = null
 ) {
 
-    // 1. Поиск книг через API
+    // Поиск книг через API
     suspend fun searchBooks(query: String): List<ExternalBook> {
         if (api == null) {
             return emptyList()
@@ -26,12 +26,13 @@ class BookRepository(
                 description = item.volumeInfo.description,
                 imageUrl = item.volumeInfo.imageLinks?.smallThumbnail,
                 thumbnailUrl = item.volumeInfo.imageLinks?.thumbnail,
-                isbn = isbn
+                isbn = isbn,
+                categoryId = 1L
             )
         } ?: emptyList()
     }
 
-    // 2. Добавление книги в фонд
+    // Добавление книги в фонд
     suspend fun addLibraryBook(
         externalBook: ExternalBook,
         categoryId: Long,
@@ -63,7 +64,7 @@ class BookRepository(
         }
     }
 
-    // 3. Получить все книги в фонде
+    // Получить все книги в фонде
     suspend fun getAllLibraryBooks(): List<LibraryBook> = bookDao.getAllLibraryBooks()
 
     suspend fun getExternalBookById(apiId: String): ExternalBook? {

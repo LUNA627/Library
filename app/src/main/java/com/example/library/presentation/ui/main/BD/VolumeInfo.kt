@@ -5,6 +5,6 @@ data class VolumeInfo(
     val title: String,
     val authors: List<String>?,
     val description: String?,
-    val imageLinks: ImageLinks?, // ← из data.remote.model
+    val imageLinks: ImageLinks?,
     val industryIdentifiers: List<IndustryIdentifier>?
 )

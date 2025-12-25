@@ -4,10 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.library.R
 
-class UserBooksAdapter(private var books: List<UserBookItem>) :
+class UserBooksAdapter(
+    private var books: List<UserBookItem>,
+    private val onExtendClick: (UserBookItem) -> Unit
+) :
     RecyclerView.Adapter<UserBooksAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,6 +32,19 @@ class UserBooksAdapter(private var books: List<UserBookItem>) :
             "Электронная книга"
         } else {
             "Вернуть до: ${book.returnInfo}"
+        }
+
+        // Сделать кликабельным только если можно продлить
+        if (book.canExtend) {
+            holder.itemView.alpha = 1f
+            holder.title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.purple_700))
+            holder.itemView.setOnClickListener {
+                onExtendClick(book)
+            }
+        } else {
+            holder.itemView.alpha = 0.6f
+            holder.title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.gray_dark))
+            holder.itemView.isClickable = false
         }
     }
 

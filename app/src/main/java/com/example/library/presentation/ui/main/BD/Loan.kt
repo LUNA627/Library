@@ -11,5 +11,6 @@ data class Loan(
     val issueDate: Long, // ← должно быть Long
     val dueDate: Long,   // ← должно быть Long
     val returnDate: Long? = null,
-    val status: String = "active"
+    val status: String, // "active", "returned"
+    val isExtended: Boolean = false
 )

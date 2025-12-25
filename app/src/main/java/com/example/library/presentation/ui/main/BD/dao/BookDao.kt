@@ -59,4 +59,10 @@ interface BookDao {
     @Query("SELECT * FROM external_book")
     suspend fun getAllExternalBooks(): List<ExternalBook>
 
+    @Update
+    suspend fun updateLoan(loan: Loan)
+
+    @Query("SELECT * FROM loan WHERE loanId = :loanId")
+    suspend fun getLoanById(loanId: Long): Loan?
+
 }

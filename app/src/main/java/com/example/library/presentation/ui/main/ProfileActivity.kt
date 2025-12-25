@@ -79,9 +79,40 @@ class ProfileActivity : AppCompatActivity() {
         debtsPlaceholder = findViewById(R.id.debtsPlaceholder)
 
         booksRecyclerView.layoutManager = LinearLayoutManager(this)
-        booksAdapter = UserBooksAdapter(emptyList())
+        booksAdapter = UserBooksAdapter(emptyList()) { bookItem ->
+            extendLoan(bookItem)
+        }
         booksRecyclerView.adapter = booksAdapter
     }
+
+
+    private fun extendLoan(bookItem: UserBookItem) {
+        lifecycleScope.launch {
+            try {
+                val loan = App.database.bookDao().getLoanById(bookItem.loanId)
+                if (loan == null || loan.isExtended) return@launch
+
+                // Обновляем дату возврата (+15 дней)
+                val newDueDate = loan.dueDate + (15L * 24 * 60 * 60 * 1000)
+                val updatedLoan = loan.copy(
+                    dueDate = newDueDate,
+                    isExtended = true
+                )
+
+                App.database.bookDao().updateLoan(updatedLoan)
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProfileActivity, "Срок продлён на 15 дней!", Toast.LENGTH_SHORT).show()
+                    loadUserBooks() // Обновить список
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProfileActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun setupTabs() {
         tabBooks.setOnClickListener { showBooksTab() }
@@ -134,7 +165,14 @@ class ProfileActivity : AppCompatActivity() {
                     "Электронная"
                 }
 
-                bookList.add(UserBookItem(extBook.title, returnDate))
+                bookList.add(
+                    UserBookItem(
+                        title = extBook.title,
+                        returnInfo = returnDate,
+                        loanId = loan.loanId,
+                        canExtend = !loan.isExtended && !libBook.isElectronic // только для бумажных!
+                    )
+                )
             }
 
             withContext(Dispatchers.Main) {

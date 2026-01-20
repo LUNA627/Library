@@ -70,7 +70,7 @@ class AddTeacherActivity : AppCompatActivity() {
                         registrationDate = Date().time,
                         isBlocked = false
                     )
-                    userDao.insertUser(newUser)
+                    App.database.userDao().insertUser(newUser)
                     val intent = Intent(this@AddTeacherActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)

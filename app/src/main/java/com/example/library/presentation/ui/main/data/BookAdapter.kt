@@ -48,38 +48,52 @@ class BookAdapter(
         holder.electronicBadge.visibility = if (book.isElectronic) View.VISIBLE else View.GONE
         holder.availableBadge.visibility = View.VISIBLE
 
-        Glide.with(holder.coverImageView.context)
-            .load(book.imageUrl)
-            .placeholder(R.drawable.ic_placeholder_book)
-            .fitCenter()
-            .into(holder.coverImageView)
+        holder.coverImageView.setImageDrawable(null)
+
+        val secureUrl = book.imageUrl?.replace("http://", "https://")
+
+        if (!secureUrl.isNullOrEmpty()) {
+            Glide.with(holder.coverImageView.context)
+                .load(secureUrl)
+                .fitCenter()
+                .into(holder.coverImageView)
+        } else {
+            holder.coverImageView.setImageDrawable(null)
+        }
 
         Log.d("BOOK_IMAGE", "URL: ${book.imageUrl}")
 
-
         holder.detailsButton.text = "Добавить"
-        holder.detailsButton.setOnClickListener {
-            // Обновляем состояние кнопки
-            if (book.isAdded) {
-                holder.detailsButton.text = "Добавлено!"
-                holder.detailsButton.isEnabled = false
-            }
-            else {
-                holder.detailsButton.text = "Добавить"
-                holder.detailsButton.isEnabled = true
-                holder.detailsButton.setOnClickListener {
-                    if (context is MainActivity) {
-                        context.addBookToUserProfile(book) { success ->
-                            if (success) {
-                                book.isAdded = true
-                                holder.detailsButton.text = "Добавлено!"
-                                holder.detailsButton.isEnabled = false
+        if (book.copiesAvailable <= 0) {
+            holder.detailsButton.text = "Нет в наличии"
+            holder.detailsButton.isEnabled = false
+            holder.detailsButton.alpha = 0.5f
+        }else{
+            holder.detailsButton.setOnClickListener {
+                // Обновляем состояние кнопки
+                if (book.isAdded) {
+                    holder.detailsButton.text = "Добавлено!"
+                    holder.detailsButton.isEnabled = false
+                }
+                else {
+                    holder.detailsButton.text = "Добавить"
+                    holder.detailsButton.isEnabled = true
+                    holder.detailsButton.setOnClickListener {
+                        if (context is MainActivity) {
+                            context.addBookToUserProfile(book) { success ->
+                                if (success) {
+                                    book.isAdded = true
+                                    holder.detailsButton.text = "Добавлено!"
+                                    holder.detailsButton.isEnabled = false
+                                    notifyItemChanged(position)
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
 

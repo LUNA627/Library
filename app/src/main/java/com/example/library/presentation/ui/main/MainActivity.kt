@@ -181,7 +181,8 @@ import retrofit2.converter.gson.GsonConverterFactory
                                 category = getCategoryName(libBook.categoryId),
                                 isElectronic = libBook.isElectronic,
                                 isAdded = isAdded,
-                                imageUrl = externalBook.imageUrl
+                                imageUrl = externalBook.imageUrl,
+                                copiesAvailable = libBook.copiesAvailable
                             )
                         )
                     }
@@ -282,23 +283,24 @@ import retrofit2.converter.gson.GsonConverterFactory
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@MainActivity, "Пользователь не найден", Toast.LENGTH_SHORT).show()
                         }
+                        callback(false)
                         return@launch
                     }
 
-                    // 1. Найти ExternalBook по названию
                     val externalBooks = App.database.bookDao().getAllExternalBooks()
                     val externalBook = externalBooks.find { it.title == book.title }
                     if (externalBook == null) {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@MainActivity, "Книга не найдена в базе", Toast.LENGTH_SHORT).show()
                         }
+                        callback(false)
                         return@launch
                     }
 
-                    // 2. Найти LibraryBook по externalBookId
-                    val libraryBook = App.database.bookDao().getLibraryBookByExternalId(externalBook.apiId)
+                    var libraryBook = App.database.bookDao().getLibraryBookByExternalId(externalBook.apiId)
+
                     if (libraryBook == null) {
-                        // Книги нет в библиотеке — добавляем
+                        // Создаём новую книгу
                         val newLibBook = LibraryBook(
                             bookId = 0,
                             externalBookId = externalBook.apiId,
@@ -308,38 +310,53 @@ import retrofit2.converter.gson.GsonConverterFactory
                             copiesAvailable = 1
                         )
                         val libBookId = App.database.bookDao().insertLibraryBook(newLibBook)
-
-                        // 3. Создаём Loan с ПРАВИЛЬНЫМ bookId
-                        val loan = Loan(
-                            loanId = 0,
-                            userId = user.userId,
-                            bookId = libBookId, // ← ПРАВИЛЬНО!
-                            issueDate = System.currentTimeMillis(),
-                            dueDate = System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000),
-                            status = "active"
-                        )
-                        App.database.bookDao().insertLoan(loan)
-                    } else {
-                        // Книга уже есть — используем её bookId
-                        val loan = Loan(
-                            loanId = 0,
-                            userId = user.userId,
-                            bookId = libraryBook.bookId, // ← ПРАВИЛЬНО!
-                            issueDate = System.currentTimeMillis(),
-                            dueDate = System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000),
-                            status = "active"
-                        )
-                        App.database.bookDao().insertLoan(loan)
+                        libraryBook = App.database.bookDao().getLibraryBookById(libBookId)
                     }
 
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@MainActivity, "Книга добавлена!", Toast.LENGTH_SHORT).show()
-                        callback(true)
+                    libraryBook?.let { libBook ->
+                        if (libBook.copiesAvailable <= 0) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Книг нет в наличии",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            callback(false)
+                            return@launch
+                        }
+
+                        // Создаём выдачу
+                        val loan = Loan(
+                            loanId = 0,
+                            userId = user.userId,
+                            bookId = libBook.bookId,
+                            issueDate = System.currentTimeMillis(),
+                            dueDate = System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000),
+                            status = "active"
+                        )
+                        App.database.bookDao().insertLoan(loan)
+
+                        // Уменьшаем копии
+                        val updatedLibBook = libBook.copy(
+                            copiesAvailable = libBook.copiesAvailable - 1
+                        )
+                        App.database.bookDao().updateLibraryBook(updatedLibBook)
+
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Книга добавлена!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            callback(true)
+                        }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(this@MainActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
+                    callback(false)
                 }
             }
         }

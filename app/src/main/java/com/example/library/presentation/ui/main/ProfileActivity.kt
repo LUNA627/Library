@@ -148,7 +148,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun loadUserBooks() {
         lifecycleScope.launch {
             val db = App.database
-            val user = db.userDao().getUserByEmail(userEmail)
+            val user = App.database.userDao().getUserByEmail(userEmail)
             if (user == null) return@launch
 
             val loans = db.bookDao().getAllLoansByUser(user.userId)

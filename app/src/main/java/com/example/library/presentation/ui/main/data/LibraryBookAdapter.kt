@@ -2,6 +2,7 @@ package com.example.library.presentation.ui.main.data
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,35 +50,10 @@ class LibraryBookAdapter(
 
         val book = books[position]
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val externalBook = repository.getExternalBookById(book.externalBookId)
-            if (externalBook != null) {
-                holder.title.text = externalBook.title
-                holder.author.text = externalBook.author
-                holder.category.text = "Раздел: ${getCategoryName(book.categoryId)}"
-
-                val imageUrl = externalBook.imageUrl ?: externalBook.thumbnailUrl
-
-                if (!imageUrl.isNullOrEmpty()) {
-                    Glide.with(holder.itemView.context)
-                        .load(imageUrl)
-                        .placeholder(R.drawable.ic_placeholder_book)
-                        .error(R.drawable.ic_placeholder_book)
-                        .into(holder.bookCover)
-                } else {
-                    holder.bookCover.setImageResource(R.drawable.ic_placeholder_book)
-                }
-            }
-        }
-
-
-
-        // Тип книги
         holder.typeBadge.text = if (book.isElectronic) "[Э]" else "[Б]"
         holder.typeBadge.setBackgroundResource(
             if (book.isElectronic) R.drawable.badge_green else R.drawable.badge_blue
         )
-
 
         // Доступность
         holder.availability.text = if (book.isElectronic) {
@@ -85,6 +61,26 @@ class LibraryBookAdapter(
         } else {
             "Доступно: ${book.copiesAvailable}/${book.copiesTotal}"
         }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val externalBook = repository.getExternalBookById(book.externalBookId)
+            if (externalBook != null) {
+                holder.title.text = externalBook.title
+                holder.author.text = externalBook.author
+                holder.category.text = "Раздел: ${getCategoryName(book.categoryId)}"
+
+                val secureUrl = (externalBook.imageUrl ?: externalBook.thumbnailUrl)?.replace("http://", "https://")
+
+                if (!secureUrl.isNullOrEmpty()) {
+                    Glide.with(holder.itemView.context)
+                        .load(secureUrl)
+                        .into(holder.bookCover)
+                } else {
+                    holder.bookCover.setImageResource(R.drawable.ic_placeholder_book)
+                }
+            }
+        }
+
 
         // Одиночный клик — редактирование
         holder.itemView.setOnClickListener {

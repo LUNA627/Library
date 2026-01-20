@@ -21,7 +21,6 @@
             android:layout_width="80dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_placeholder_book"
             android:contentDescription="Обложка книги" />
 
         <!-- Информация о книге -->

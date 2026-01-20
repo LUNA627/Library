@@ -6,5 +6,6 @@ data class DisplayBook(
     val category: String,
     val isElectronic: Boolean,
     var isAdded: Boolean = false,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val copiesAvailable: Int = 0
 )

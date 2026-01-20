@@ -145,11 +145,11 @@ class AddEditBookActivity : AppCompatActivity() {
         bookTitle.text = selectedBook.title
         bookAuthor.text = selectedBook.author
         bookIsbn.text = selectedBook.isbn?.let { "ISBN: $it" } ?: "ISBN: —"
+        val secureUrl = selectedBook.imageUrl?.replace("http://", "https://")
 
-        if (!selectedBook.imageUrl.isNullOrEmpty()) {
+        if (!secureUrl.isNullOrEmpty()) {
             Glide.with(this)
-                .load(selectedBook.imageUrl)
-                .placeholder(R.drawable.ic_placeholder_book)
+                .load(secureUrl)
                 .into(bookCover)
         } else {
             bookCover.setImageResource(R.drawable.ic_placeholder_book)

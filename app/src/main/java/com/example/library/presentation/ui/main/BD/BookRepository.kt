@@ -19,13 +19,16 @@ class BookRepository(
                 ?.find { it.type == "ISBN_13" || it.type == "ISBN_10" }
                 ?.identifier
 
+            val imageUrl = item.volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://")
+            val smallThumbnail = item.volumeInfo.imageLinks?.smallThumbnail?.replace("http://", "https://")
+
             ExternalBook(
                 apiId = item.id,
                 title = item.volumeInfo.title,
                 author = item.volumeInfo.authors?.joinToString(", ") ?: "Unknown",
                 description = item.volumeInfo.description,
-                imageUrl = item.volumeInfo.imageLinks?.smallThumbnail,
-                thumbnailUrl = item.volumeInfo.imageLinks?.thumbnail,
+                imageUrl = imageUrl,
+                thumbnailUrl = smallThumbnail,
                 isbn = isbn,
                 categoryId = 1L
             )

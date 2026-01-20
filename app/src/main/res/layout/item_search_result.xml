@@ -16,10 +16,9 @@
 
         <ImageView
             android:id="@+id/bookCover"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_placeholder_book"
+            android:layout_width="100dp"
+            android:layout_height="133dp"
+            android:scaleType="fitCenter"
             android:contentDescription="Обложка" />
 
         <LinearLayout

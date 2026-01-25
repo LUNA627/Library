@@ -4,18 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="16dp">
+    android:background="@color/white">
+
+    <!-- Сиреневый фон (до кнопки) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/purpleBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/purple_500"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/saveButton" />
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/purple_500"
         app:title="Добавить в библиотеку"
-        app:titleTextColor="@color/purple_500"
-        android:layout_marginTop="30dp"
+        app:titleTextColor="@color/white"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -27,24 +37,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.cardview.widget.CardView
             android:layout_width="150dp"
             android:layout_height="200dp"
-            app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="8dp">
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="8dp">
 
-        <ImageView
-            android:id="@+id/bookCover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:contentDescription="Обложка" />
+            <ImageView
+                android:id="@+id/bookCover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:contentDescription="Обложка" />
 
-    </androidx.cardview.widget.CardView>
-
-
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -90,6 +99,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:boxBackgroundColor="@color/white"
         app:boxStrokeColor="@color/purple_500"
         app:layout_constraintTop_toBottomOf="@id/bookInfoContainer">
@@ -110,8 +121,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Электронная книга"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintTop_toBottomOf="@id/categoryInputLayout" />
 
     <!-- Количество экземпляров -->
@@ -120,6 +133,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:boxBackgroundColor="@color/white"
         app:boxStrokeColor="@color/purple_500"
         android:visibility="visible"
@@ -146,8 +161,8 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:backgroundTint="@color/purple_500"
-        android:background="@drawable/button_style"
-        android:layout_marginTop="32dp"
+
+        android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/copiesInputLayout"
         app:layout_constraintBottom_toBottomOf="parent" />
 

@@ -79,11 +79,63 @@ class ProfileActivity : AppCompatActivity() {
         debtsPlaceholder = findViewById(R.id.debtsPlaceholder)
 
         booksRecyclerView.layoutManager = LinearLayoutManager(this)
-        booksAdapter = UserBooksAdapter(emptyList()) { bookItem ->
-            extendLoan(bookItem)
-        }
+
+
+        booksAdapter = UserBooksAdapter(
+            context = this,
+            books = emptyList(),
+            onExtendClick = { bookItem ->
+                extendLoan(bookItem)
+            },
+            onReturnClick = { bookItem ->
+                returnBook(bookItem)
+            }
+        )
         booksRecyclerView.adapter = booksAdapter
     }
+
+
+    private fun returnBook(bookItem: UserBookItem) {
+        lifecycleScope.launch {
+            try {
+                // 1. Получаем выдачу
+                val loan = App.database.bookDao().getLoanById(bookItem.loanId)
+                if (loan == null || loan.status == "returned") {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@ProfileActivity, "Книга уже возвращена", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+
+                // 2. Обновляем статус на "returned"
+                val updatedLoan = loan.copy(status = "returned")
+                App.database.bookDao().updateLoan(updatedLoan)
+
+                // 3. Увеличиваем количество доступных копий
+                val libBook = App.database.bookDao().getLibraryBookById(loan.bookId)
+                if (libBook != null && !libBook.isElectronic) {
+                    val updatedLibBook = libBook.copy(
+                        copiesAvailable = libBook.copiesAvailable + 1
+                    )
+                    App.database.bookDao().updateLibraryBook(updatedLibBook)
+                }
+
+                // 4. Обновляем список
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProfileActivity, "Книга успешно возвращена!", Toast.LENGTH_SHORT).show()
+                    loadUserBooks()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProfileActivity, "Ошибка при возврате: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+
 
 
     private fun extendLoan(bookItem: UserBookItem) {
@@ -152,6 +204,8 @@ class ProfileActivity : AppCompatActivity() {
             if (user == null) return@launch
 
             val loans = db.bookDao().getAllLoansByUser(user.userId)
+                .filter { it.status != "returned" }
+
             val bookList = mutableListOf<UserBookItem>()
 
             for (loan in loans) {
@@ -170,7 +224,7 @@ class ProfileActivity : AppCompatActivity() {
                         title = extBook.title,
                         returnInfo = returnDate,
                         loanId = loan.loanId,
-                        canExtend = !loan.isExtended && !libBook.isElectronic // только для бумажных!
+                        canExtend = !loan.isExtended && !libBook.isElectronic
                     )
                 )
             }
@@ -183,5 +237,10 @@ class ProfileActivity : AppCompatActivity() {
 
     fun Date.toSimpleString(): String {
         return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUserBooks()
     }
 }

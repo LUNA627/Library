@@ -1,5 +1,7 @@
 package com.example.library.presentation.ui.main.data
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.library.R
 
 class UserBooksAdapter(
+    private val context: Context, // ← добавили контекст
     private var books: List<UserBookItem>,
-    private val onExtendClick: (UserBookItem) -> Unit
-) :
-    RecyclerView.Adapter<UserBooksAdapter.ViewHolder>() {
+    private val onExtendClick: (UserBookItem) -> Unit,
+    private val onReturnClick: (UserBookItem) -> Unit // ← новое!
+) : RecyclerView.Adapter<UserBooksAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.bookTitle)
@@ -34,17 +37,30 @@ class UserBooksAdapter(
             "Вернуть до: ${book.returnInfo}"
         }
 
-        // Сделать кликабельным только если можно продлить
+        // Продление — короткий клик
         if (book.canExtend) {
             holder.itemView.alpha = 1f
-            holder.title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.purple_700))
+            holder.title.setTextColor(ContextCompat.getColor(context, R.color.purple_700))
             holder.itemView.setOnClickListener {
                 onExtendClick(book)
             }
         } else {
             holder.itemView.alpha = 0.6f
-            holder.title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.gray_dark))
+            holder.title.setTextColor(ContextCompat.getColor(context, R.color.gray_dark))
             holder.itemView.isClickable = false
+        }
+
+        // 🔥 ВОЗВРАТ — ДОЛГОЕ НАЖАТИЕ (даже если нельзя продлить!)
+        holder.itemView.setOnLongClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Вернуть книгу?")
+                .setMessage("Вы уверены, что хотите вернуть «${book.title}»?")
+                .setPositiveButton("Да") { _, _ ->
+                    onReturnClick(book)
+                }
+                .setNegativeButton("Нет", null)
+                .show()
+            true
         }
     }
 

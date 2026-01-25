@@ -65,4 +65,11 @@ interface BookDao {
     @Query("SELECT * FROM loan WHERE loanId = :loanId")
     suspend fun getLoanById(loanId: Long): Loan?
 
+
+    @Query("SELECT * FROM loan WHERE userId = :userId AND bookId = :bookId AND status = 'active'")
+    suspend fun getActiveLoanByUserAndBook(userId: Long, bookId: Long): Loan?
+
+    @Query("DELETE FROM loan WHERE loanId = :loanId")
+    fun deleteLoan(loanId: Long)
+
 }

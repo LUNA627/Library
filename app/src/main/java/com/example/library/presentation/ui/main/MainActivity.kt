@@ -5,59 +5,43 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Surface
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 
-import androidx.cardview.widget.CardView
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.library.presentation.ui.main.data.Book
+import androidx.viewpager2.widget.ViewPager2
 import com.example.library.presentation.ui.main.data.BookAdapter
 import com.google.android.material.textfield.TextInputEditText
 import com.example.library.R
-import com.example.library.presentation.ui.main.BD.ExternalBook
-import com.example.library.presentation.ui.main.BD.GoogleBooksApi
 import com.example.library.presentation.ui.main.BD.LibraryBook
 import com.example.library.presentation.ui.main.BD.Loan
 import com.example.library.presentation.ui.main.BD.db.App
 import com.example.library.presentation.ui.main.data.AdminCardAdapter
 import com.example.library.presentation.ui.main.data.AdminCardItem
+
 import com.example.library.presentation.ui.main.data.DisplayBook
-import com.example.library.presentation.ui.main.data.SearchBookAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
+class MainActivity : AppCompatActivity() {
 
-    class MainActivity : AppCompatActivity() {
-
-        private lateinit var userNameTextView: TextView
-        private lateinit var profileIcon: ImageView
-        private lateinit var searchEditText: TextInputEditText
-        private lateinit var booksRecyclerView: RecyclerView
-        private lateinit var studentMainContainer: LinearLayout
-        private lateinit var librarianMainContainer: LinearLayout
+    private lateinit var userNameTextView: TextView
+    private lateinit var profileIcon: ImageView
+    private lateinit var searchEditText: TextInputEditText
+    private lateinit var booksRecyclerView: RecyclerView
+    private lateinit var studentMainContainer: LinearLayout
+    private lateinit var librarianMainContainer: LinearLayout
 
         private var allBooks = mutableListOf<DisplayBook>()
 
@@ -92,14 +76,14 @@ import retrofit2.converter.gson.GsonConverterFactory
             }
         }
 
-        private fun initViews() {
-            userNameTextView = findViewById(R.id.userName_text_view)
-            profileIcon = findViewById(R.id.profile_icon)
-            searchEditText = findViewById(R.id.search_edit_text)
-            booksRecyclerView = findViewById(R.id.books_recycler_view)
-            studentMainContainer = findViewById(R.id.studentMainContainer)
-            librarianMainContainer = findViewById(R.id.librarianMainContainer)
-        }
+    private fun initViews() {
+        userNameTextView = findViewById(R.id.userName_text_view)
+        profileIcon = findViewById(R.id.profile_icon)
+        searchEditText = findViewById(R.id.search_edit_text)
+        booksRecyclerView = findViewById(R.id.books_recycler_view)
+        studentMainContainer = findViewById(R.id.studentMainContainer)
+        librarianMainContainer = findViewById(R.id.librarianMainContainer)
+    }
 
         private fun setupRecyclerView() {
             adapter = BookAdapter(this, allBooks)
@@ -117,51 +101,50 @@ import retrofit2.converter.gson.GsonConverterFactory
             }
         }
 
-        private fun setupUIByRole(role: String, email: String) {
-            val displayName = when (role) {
-                "librarian" -> "Библиотекарь"
-                "teacher" -> "Преподаватель"
-                else -> email.split("@")[0].replaceFirstChar { it.uppercase() }
+    private fun setupUIByRole(role: String, email: String) {
+        val displayName = when (role) {
+            "librarian" -> "Библиотекарь"
+            "teacher" -> "Преподаватель"
+            else -> email.split("@")[0].replaceFirstChar { it.uppercase() }
+        }
+        userNameTextView.text = displayName
+
+        when (role) {
+            "librarian" -> {
+                studentMainContainer.visibility = View.GONE
+                librarianMainContainer.visibility = View.VISIBLE
+
+                // Настройка карусели админа
+                setupAdminCarousel()
             }
-            userNameTextView.text = displayName
 
-            when (role) {
-                "librarian" -> {
-                    studentMainContainer.visibility = View.GONE
-                    librarianMainContainer.visibility = View.VISIBLE
-
-                    // Настройка карусели админа
-                    setupAdminCarousel()
-                }
-
-                else -> {
-                    studentMainContainer.visibility = View.VISIBLE
-                    librarianMainContainer.visibility = View.GONE
-                }
+            else -> {
+                studentMainContainer.visibility = View.VISIBLE
+                librarianMainContainer.visibility = View.GONE
             }
         }
+    }
+    private fun setupAdminCarousel() {
+        val carousel = findViewById<RecyclerView>(R.id.adminCarousel)
 
-        private fun setupAdminCarousel() {
-            val carousel = findViewById<RecyclerView>(R.id.adminCarousel)
-
-            val items = listOf(
-                AdminCardItem("Книги", R.drawable.ic_books) {
-                    startActivity(Intent(this, BookManagementActivity::class.java))
-                },
-                AdminCardItem("Читатели", R.drawable.ic_users) {
-                    startActivity(Intent(this, UserManagementActivity::class.java))
-                }
-            )
-
-            val adapter = AdminCardAdapter(items) { item ->
-                item.action()
+        val items = listOf(
+            AdminCardItem("Книги", R.drawable.ic_books) {
+                startActivity(Intent(this, BookManagementActivity::class.java))
+            },
+            AdminCardItem("Читатели", R.drawable.ic_users) {
+                startActivity(Intent(this, UserManagementActivity::class.java))
             }
+        )
 
-            carousel.adapter = adapter
-            carousel.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-
+        val adapter = AdminCardAdapter(items) { item ->
+            item.action()
         }
+
+        carousel.adapter = adapter
+        carousel.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+
+    }
 
         private fun loadBooksFromDatabase() {
             lifecycleScope.launch {
@@ -196,21 +179,22 @@ import retrofit2.converter.gson.GsonConverterFactory
             }
         }
 
-        private suspend fun isBookAddedByUser(bookTitle: String): Boolean {
+        private fun isBookAddedByUser(bookTitle: String): Boolean {
             val prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-            val userEmail = prefs.getString("userEmail", "") ?: ""
-            val user = App.database.userDao().getUserByEmail(userEmail) ?: return false
+            val userEmail = prefs.getString("userEmail", "") ?: return false
 
-            val externalBooks = App.database.bookDao().getAllExternalBooks()
-            val externalBook = externalBooks.find { it.title == bookTitle } ?: return false
+            return runBlocking {
+                withContext(Dispatchers.IO) {
+                    val user = App.database.userDao().getUserByEmail(userEmail) ?: return@withContext false
+                    val externalBooks = App.database.bookDao().getAllExternalBooks()
+                    val externalBook = externalBooks.find { it.title == bookTitle } ?: return@withContext false
+                    val libraryBook = App.database.bookDao().getLibraryBookByExternalId(externalBook.apiId) ?: return@withContext false
 
-            val libraryBook = App.database.bookDao().getLibraryBookByExternalId(externalBook.apiId) ?: return false
-
-            val loans = App.database.bookDao().getAllLoansByUser(user.userId)
-            return loans.any { it.bookId == libraryBook.bookId }
+                    val activeLoan = App.database.bookDao().getActiveLoanByUserAndBook(user.userId, libraryBook.bookId)
+                    activeLoan != null
+                }
+            }
         }
-
-
         private fun setupSearch() {
             searchEditText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -325,6 +309,15 @@ import retrofit2.converter.gson.GsonConverterFactory
                             callback(false)
                             return@launch
                         }
+                        if (book.isElectronic) {
+                            // Для электронных книг — разрешаем повторное добавление
+                            val existingLoan = App.database.bookDao().getActiveLoanByUserAndBook(user.userId, libraryBook.bookId)
+                            if (existingLoan != null) {
+                                // Можно просто обновить дату или оставить как есть
+                                // Или удалить старую выдачу и создать новую
+                                App.database.bookDao().deleteLoan(existingLoan.loanId)
+                            }
+                        }
 
                         // Создаём выдачу
                         val loan = Loan(
@@ -333,7 +326,8 @@ import retrofit2.converter.gson.GsonConverterFactory
                             bookId = libBook.bookId,
                             issueDate = System.currentTimeMillis(),
                             dueDate = System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000),
-                            status = "active"
+                            status = "active",
+                            isExtended = false
                         )
                         App.database.bookDao().insertLoan(loan)
 
